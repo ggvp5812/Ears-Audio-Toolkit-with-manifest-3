@@ -3,7 +3,7 @@
   "name": "Ears: Bass Boost(Unofficial port) ",
   "short_name": "Ears",
   "description": "EQ any audio you find on the web, live! Crank the bass, dim the highs, up the vocals: all with Ears!(Unofficial port to manifest_version 3) ",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": "Kevin King",
   "icons": {
     "16": "ears16.png",
