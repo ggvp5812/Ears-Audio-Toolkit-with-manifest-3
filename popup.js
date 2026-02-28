@@ -103,7 +103,7 @@ function scope() {
                 };
                 reader.readAsText(e[t]);
             }
-            u.value = ""; // Сбрасываем input, чтобы можно было загрузить тот же файл снова
+            u.value = ""; 
         };
         
         var l = document.getElementById("vizButton");
@@ -165,7 +165,7 @@ function scope() {
 
     chrome.runtime.onMessage.addListener(function(e, t, n) {
         if (e.type == "sendWorkspaceStatus") {
-            i = false; // Отключаем авто-рефреш, так как данные пришли
+            i = false; 
             renderWorkspace(e);
         }
         if (e.type == "sendSampleRate") {
@@ -192,7 +192,7 @@ function scope() {
         var n = e.fft;
         if (I && n && n.length > 0) {
             var strokeGradient = I.gradient("l(.5, 0, .5, 1)" + m + "-" + q);
-            var r = [];
+            var r =[];
             
             function a(e) { return B - 1 - e; }
             
@@ -205,7 +205,7 @@ function scope() {
                 r.push([s, c]);
             }
             
-            var u = [];
+            var u =[];
             for (var i in r) {
                 var l = r[i];
                 if (u.length == 0) {
@@ -284,13 +284,12 @@ function scope() {
         }
     }
 
-    // Параметры SVG и графики
     var m = "wheat", q = "#2C3E50", b = "#9573A8", w = "#CDF7E1";
     var T = 600, B = 300, g = 30, c = 22050, u = 30, M = 10, k = -30;
     var I = null, C = null, S = null, x = null;
 
     function renderWorkspace(e) {
-        var s = [];
+        var s =[];
         for (var t = 0; t < e.eqFilters.length; t++) {
             var n = e.eqFilters[t];
             var r = {};
@@ -307,7 +306,6 @@ function scope() {
         initSVG(s, i);
         renderActiveTabs(e.streams);
         
-        // Определяем состояние кнопки "Stop/Start EQ"
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             if(tabs && tabs[0] && e.streams && e.streams.find(tab => tab.id === tabs[0].id)) {
                 setupTabButtonStop();
@@ -475,7 +473,7 @@ function scope() {
             }
         }
         
-        var mArr = [];
+        var mArr =[];
         for (var g1 = 0; g1 < T; g1 += 2) {
             var p1 = Math.pow(g1 / T, 4) * Math.PI;
             var y1 = Math.pow(Math.sin(p1 / 2), 2);
@@ -483,6 +481,7 @@ function scope() {
             M1 = M1 * 10 / Math.LN10;
             M1 = F(M1);
             if (M1 == -Infinity) M1 = B - 1;
+            if (isNaN(M1) || M1 === Infinity || M1 === -Infinity) M1 = B / 2;
             if (Math.abs(M1 - B / 2) > 1) {
                 mArr = mArr.concat([g1, M1]);
             }
@@ -531,7 +530,7 @@ function scope() {
             }
             o.y = r;
             o.gain = Math.pow(10, f(r) / 10);
-            this.attr({ transform: this.data("origTransform") + (this.data("origTransform") ? "T" : "t") + [0, t] });
+            this.attr({ transform: this.data("origTransform") + (this.data("origTransform") ? "T" : "t") +[0, t] });
             chrome.runtime.sendMessage({ type: "modifyGain", gain: o.gain });
         };
     }
@@ -553,7 +552,11 @@ function scope() {
                 var i = getOffset(I);
                 n = n - i[0];
                 r = r - i[1];
-                if (n < 0 || n >= T || r < 0 || r >= B) return;
+                
+                if (n < 5) n = 5;
+                if (n >= T) n = T - 1;
+                
+                if (r < 0 || r >= B) return;
                 o.x = n;
                 o.y = r;
                 o.gain = f(r);
